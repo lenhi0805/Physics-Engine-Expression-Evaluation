@@ -116,4 +116,377 @@ int main() {
   }
 } 
 
+	// LinkList.cpp
+#include "LinkedList.h"
+#include <iostream>
+//default constructor
+LinkedList::LinkedList(){
+  this->length = 0;
+  this->head = nullptr;
+}
+
+int LinkedList::getLength(){
+  return this->length;
+}
+Node*& LinkedList::getHead(){
+  return this->head;
+}
+
+void LinkedList::setLength(int len){
+  this->length = len;
+}
+
+void LinkedList::setHead(Node* node){
+  if (node == nullptr) {
+        this->head = nullptr;
+    }
+    else {
+        this->head = new Node(node->getCoef(), node->getExp());
+        this->length++;
+        Node *curr = this->head;
+        Node *nodeHead = node;
+        Node *currNode = nodeHead;
+        while (currNode->getNext() != nullptr) {
+            curr->setNext(new Node(currNode->getNext()->getCoef(), currNode->getNext()->getExp()));
+            this->length++;
+            currNode = currNode->getNext();
+            curr = curr->getNext();
+        }
+    }
+}
+
+void LinkedList::addNode(Node*&node){
+    Node* add = new Node(node->getCoef(), node->getExp());
+    if (this->head == nullptr){
+        this->head = add;
+        this->length ++;
+    } else {
+        Node* curr = this->head;
+        while (curr->getNext() != nullptr){
+            curr = curr->getNext();
+        }
+        curr->setNext(add);
+        this->length ++;
+    }
+}
+
+
+  void LinkedList::display() {
+    Node* curr = this->head;
+    while (curr != nullptr){
+        if (curr->getExp() == 0){
+            std::cout << curr->getCoef() << " " << " ";
+        } else if (curr->getExp() == 1){
+            std::cout << curr->getCoef() << "x" << " ";
+        }else {
+            std::cout << curr->getCoef() << "x^" << curr->getExp() << " " << " ";
+        }
+        curr = curr->getNext();
+    }
+  }
+// selection sort
+  void sortExp(Node* &head)
+{
+    Node *ptr1, *ptr2, *ptr3, *ptr4, *ptr5;
+ 
+    ptr1 = ptr2 = head;
+ 
+    while (ptr2->getNext()) {
+ 
+        ptr3 = ptr4 = ptr2->getNext();
+
+        while (ptr4) {
+ 
+            if (ptr2->getExp() < ptr4->getExp()) {
+
+                if (ptr2->getNext() == ptr4) {
+ 
+                   
+                    if (ptr2 == head) {
+ 
+                        ptr2->setNext(ptr4->getNext());
+                        ptr4->setNext(ptr2);
+ 
+                        
+                        ptr5 = ptr2;
+                        ptr2 = ptr4;
+                        ptr4 = ptr5;
+ 
+                        ptr3 = ptr4;
+ 
+                        head = ptr2;                        
+                        ptr4 = ptr4->getNext();
+                    }
+ 
+                    
+                    else {
+ 
+                        
+                        ptr2->setNext(ptr4->getNext());
+                        ptr4->setNext(ptr2);
+                        ptr1->setNext(ptr4);
+ 
+                       
+                        ptr5 = ptr2;
+                        ptr2 = ptr4;
+                        ptr4 = ptr5;
+                        ptr3 = ptr4;
+
+                        ptr4 = ptr4->getNext();
+                    }
+                }
+ 
+  
+                else {
+ 
+                  
+                    if (ptr2 == head) {
+ 
+                        
+                        ptr5 = ptr2->getNext();
+                        ptr2->setNext(ptr4->getNext());
+                        ptr4->setNext(ptr5);
+                        ptr3->setNext(ptr2);
+ 
+                        ptr5 = ptr2;
+                        ptr2 = ptr4;
+                        ptr4 = ptr5;
+ 
+                        ptr3 = ptr4;
+ 
+                        ptr4 = ptr4->getNext();
+ 
+                        head = ptr2;
+                    }
+ 
+                   
+                    else {
+ 
+                        
+                        ptr5 = ptr2->getNext();
+                        ptr2->setNext(ptr4->getNext());
+                        ptr4->setNext(ptr5);
+                        ptr3->setNext(ptr2);
+                        ptr1->setNext(ptr4);
+ 
+                        
+                        ptr5 = ptr2;
+                        ptr2 = ptr4;
+                        ptr4 = ptr5;
+ 
+                        ptr3 = ptr4;
+ 
+                        ptr4 = ptr4->getNext();
+                    }
+                }
+            }
+            else {
+
+                ptr3 = ptr4;
+                ptr4 = ptr4->getNext();
+            }
+        }
+ 
+        ptr1 = ptr2;
+        ptr2 = ptr2->getNext();
+    }
+}
+//std::ostream& operator<<(std::ostream& os,const LinkedList D){
+  
+//}
+// create linked list
+Node* LinkedList::operator[](int index) {
+  Node *ptr= head;
+  for (int x=0;x<index;x++){
+    ptr=ptr->getNext();
+  } 
+  return ptr;
+ }
+ std::ostream& operator<<(std::ostream& os, LinkedList &list){
+   for (int x = 0; x < list.getLength(); x++){
+      if (list[x]->getCoef() == 0){
+        continue;
+      }
+        if (x == 0){
+            os << *list[x] << " ";
+        } else if (list[x]->getCoef() > 0){
+            os << "+ " << *list[x] << " ";
+        } else {
+            if (list[x]->getExp() == 0){
+                os << "- " << (-1)*(list[x]->getCoef()) << " ";
+            } else if (list[x]->getExp() == 1){
+                os << "- " << (-1)*(list[x]->getCoef()) << "x" << " ";
+            } else{
+                os << "- " << (-1)*(list[x]->getCoef()) << "x^" << list[x]->getExp() << " ";
+            }
+        }
+    }
+    return os;
+ }
+ LinkedList& LinkedList::operator+=(Node* &ptr){
+   Node* add = new Node(ptr->getCoef(), ptr->getExp());
+    if (this->head == nullptr){
+        this->head = add;
+        this->length ++;
+    } else {
+        Node* curr = this->head;
+        while (curr->getNext() != nullptr){
+            curr = curr->getNext();
+        }
+        curr->setNext(add);
+        this->length ++;
+    }
+return *this;
+ }
+  void LinkedList::sortList(){
+  sortExp(this->head);
+}
+	
+	//LinkList.h
+	#ifndef LLIST_H  //if not defined
+#define LLIST_H
+#include "Node.h"
+
+class LinkedList {
+private:
+  int length;
+  Node *head;
+public :
+  //default constructor
+  LinkedList ();
+  //overloaded constructor
+  LinkedList(LinkedList&);
+  //destructor
+  //~LinkedList();
+  //getters
+  int getLength();
+
+  Node*& getHead();
+  //setters
+  void setLength(int);
+  void setHead(Node*);
+
+  void addNode(Node*&);
+  void display();
+  void sortList();
+  Node* operator[](int index);
+  LinkedList& operator+=(Node*&ptr);
+  friend std::ostream& operator<<(std::ostream& os, LinkedList&);
+};
+#endif
+	//node.cpp
+#include "Node.h"
+#include <iostream>
+#include <iomanip>
+Node::Node(){
+  this->coef = 0;
+  this->exp = 0;
+  this->next = nullptr;
+}
+
+Node::Node (double coef,int exp){
+  this -> coef= coef;
+  this -> exp = exp;
+  this -> next = nullptr; 
+}
+
+//getters
+double Node::getCoef() const{
+  return this->coef;
+}
+int Node::getExp() const{
+  return this->exp;
+}
+Node* Node::getNext(){
+    return this->next;
+}
+
+//setters
+void Node::setCoef(double val){
+  this->coef = val;
+}
+void Node::setExp(int val){
+  this->exp = val;
+}
+void Node::setNext(Node * node){
+  this->next = node;
+}
+
+std::ostream& operator<<(std::ostream& os, Node &ptr)
+{ if (ptr.exp==0) {
+  os << std::fixed << std::setprecision(3) << ptr.coef;
+     return os; }
+  if (ptr.exp==1){
+    if (ptr.coef == 1){
+      os << "x";
+    } else{
+     os << std::fixed << std::setprecision(3) << ptr.coef<<"x";
+    }
+     return os;}
+  else { 
+    if (ptr.coef == 1){
+            os << "x^" << ptr.exp;
+        } else{
+            os << std::fixed << std::setprecision(3) << ptr.coef << "x^" << ptr.exp;
+        }
+  }
+  return os;
+  }
+  
+std::ostream& operator<<(std::ostream& os, const Node &ptr)
+{ if (ptr.exp==0) {
+  os <<ptr.coef;
+     return os; }
+  if (ptr.exp==1){
+     os <<ptr.coef<<"x";
+     return os;}
+  else { os <<ptr.coef<<"x^"<<ptr.exp;
+     return os;}
+
+  }
+std::ostream& operator<<(std::ostream& os, Node* &ptr)
+{ if (ptr->exp==0) {
+  os <<ptr->coef;
+     return os; }
+  if (ptr->exp==1){
+     os <<ptr->coef<<"x";
+     return os;}
+  else { os <<ptr->coef<<"x^"<<ptr->exp;
+     return os;}
+
+  }
+	
+	//Node.h
+	
+#ifndef NODE_H   //if not defined
+#define NODE_H
+#include <iostream>
+class Node {
+private:
+  double coef;
+  int exp;
+  Node *next;
+public:
+  //default constructor
+  Node();
+  //overloaded constructor
+  Node (double,int);
+  //destructor
+  //~Node();
+  //getters
+  double getCoef() const;
+  int getExp() const;
+  Node* getNext();
+  //setters
+  void setCoef(double);
+  void setExp(int);
+  void setNext(Node*);
+  
+  friend std::ostream& operator<<(std::ostream&, Node&);
+  friend std::ostream& operator<<(std::ostream&, Node*&);
+  friend std::ostream& operator<<(std::ostream&, const Node&);
+};
+
+
+#endif 
 
